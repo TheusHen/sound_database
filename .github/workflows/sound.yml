@@ -26,11 +26,14 @@ jobs:
           ollama pull deepseek-r1
 
       - name: Start Ollama server
-        run: nohup ollama serve & sleep 10
+        run: |
+          nohup ollama serve > ollama.log 2>&1 &
+          sleep 15
+          curl http://localhost:11434/api/version
 
       - name: Generate Deepseek R1 prompt
         run: |
-          sed 's/<insert generator.py contents here>/$(cat generator.py)/' deepseek_prompt.txt > prompt_final.txt
+          sed "s|<insert generator.py contents here>|$(cat generator.py)|" deepseek_prompt.txt > prompt_final.txt
 
       - name: Call Deepseek R1 to update code
         run: |
@@ -40,7 +43,7 @@ jobs:
               "model": "deepseek-r1",
               "messages": [
                 {"role": "system", "content": "You are an expert Python developer."},
-                {"role": "user", "content": "'"$(cat prompt_final.txt | jq -Rs .)"'"}
+                {"role": "user", "content": '"$(jq -Rs . < prompt_final.txt)"'}
               ]
             }')
           echo "$RESPONSE" | jq -r '.message.content' > generator.py
@@ -53,5 +56,5 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add generator.py sounds/
-          git commit -m "Auto-update sounds and code via Deepseek R1"
+          git commit -m "Auto-update sounds and code via Deepseek R1" || echo "No changes to commit"
           git push
