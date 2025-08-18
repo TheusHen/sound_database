@@ -20,9 +20,11 @@ jobs:
       - name: Install ffmpeg
         run: sudo apt-get update && sudo apt-get install -y ffmpeg
 
-      - name: Download Ollama (binary only, no systemd)
+      - name: Download and install Ollama
         run: |
-          curl -L https://github.com/ollama/ollama/releases/latest/download/ollama-linux-amd64 -o ollama
+          curl -L https://github.com/ollama/ollama/releases/download/v0.11.4/ollama-linux-amd64.tgz -o ollama.tgz
+          echo "a388afb2ccf4e61a3d0de88f0d0600e9e1d67e56bbc9a011ee287f62780bee33  ollama.tgz" | sha256sum -c -
+          tar -xzf ollama.tgz
           chmod +x ollama
           sudo mv ollama /usr/local/bin/
 
