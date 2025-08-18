@@ -25,6 +25,9 @@ jobs:
           curl -fsSL https://ollama.com/install.sh | sh
           ollama pull deepseek-r1
 
+      - name: Start Ollama server
+        run: nohup ollama serve & sleep 10
+
       - name: Generate Deepseek R1 prompt
         run: |
           sed 's/<insert generator.py contents here>/$(cat generator.py)/' deepseek_prompt.txt > prompt_final.txt
