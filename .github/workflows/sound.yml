@@ -1,0 +1,54 @@
+name: Update Sound Generator
+
+on:
+  schedule:
+    - cron: "0 0 * * *" # Every day at midnight UTC
+  workflow_dispatch:
+
+jobs:
+  update_sounds:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyttsx3 soundfile numpy
+
+      - name: Install ffmpeg
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+
+      - name: Install Ollama and Deepseek R1
+        run: |
+          curl -fsSL https://ollama.com/install.sh | sh
+          ollama pull deepseek-r1
+
+      - name: Generate Deepseek R1 prompt
+        run: |
+          sed 's/<insert generator.py contents here>/$(cat generator.py)/' deepseek_prompt.txt > prompt_final.txt
+
+      - name: Call Deepseek R1 to update code
+        run: |
+          RESPONSE=$(curl -s -X POST http://localhost:11434/api/chat \
+            -H "Content-Type: application/json" \
+            -d '{
+              "model": "deepseek-r1",
+              "messages": [
+                {"role": "system", "content": "You are an expert Python developer."},
+                {"role": "user", "content": "'"$(cat prompt_final.txt | jq -Rs .)"'"}
+              ]
+            }')
+          echo "$RESPONSE" | jq -r '.message.content' > generator.py
+
+      - name: Run updated Python script to generate sounds
+        run: python generator.py
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add generator.py sounds/
+          git commit -m "Auto-update sounds and code via Deepseek R1"
+          git push
