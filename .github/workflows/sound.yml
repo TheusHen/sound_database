@@ -2,7 +2,7 @@ name: Update Sound Generator
 
 on:
   schedule:
-    - cron: "0 0 * * *"
+    - cron: "0 0 * * *" # Every day at midnight UTC
   workflow_dispatch:
 
 jobs:
@@ -20,9 +20,9 @@ jobs:
       - name: Install ffmpeg
         run: sudo apt-get update && sudo apt-get install -y ffmpeg
 
-      - name: Download Ollama (no systemd)
+      - name: Download Ollama (binary only, no systemd)
         run: |
-          curl -L https://ollama.com/download/ollama-linux-amd64 -o ollama
+          curl -L https://github.com/ollama/ollama/releases/latest/download/ollama-linux-amd64 -o ollama
           chmod +x ollama
           sudo mv ollama /usr/local/bin/
 
@@ -33,7 +33,7 @@ jobs:
         run: |
           nohup ollama serve > ollama.log 2>&1 &
           sleep 20
-          curl -s http://localhost:11434/api/version || (echo "Ollama não iniciou!" && cat ollama.log && exit 1)
+          curl -s http://localhost:11434/api/version || (echo "Ollama did not start!" && cat ollama.log && exit 1)
 
       - name: Generate Deepseek R1 prompt
         run: |
@@ -62,3 +62,7 @@ jobs:
           git add generator.py sounds/
           git commit -m "Auto-update sounds and code via Deepseek R1" || echo "No changes to commit"
           git push
+
+      - name: Print Ollama logs (always)
+        if: always()
+        run: cat ollama.log || echo "No Ollama logs found"
