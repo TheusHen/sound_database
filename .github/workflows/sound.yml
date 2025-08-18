@@ -22,11 +22,16 @@ jobs:
 
       - name: Download and install Ollama
         run: |
+          # Download Ollama tarball
           curl -L https://github.com/ollama/ollama/releases/download/v0.11.4/ollama-linux-amd64.tgz -o ollama.tgz
+          # Verify SHA256 checksum
           echo "a388afb2ccf4e61a3d0de88f0d0600e9e1d67e56bbc9a011ee287f62780bee33  ollama.tgz" | sha256sum -c -
+          # Extract tarball
           tar -xzf ollama.tgz
-          chmod +x ollama
-          sudo mv ollama /usr/local/bin/
+          # Make the binary executable
+          chmod +x ollama-linux-amd64/bin/ollama
+          # Move to system PATH
+          sudo mv ollama-linux-amd64/bin/ollama /usr/local/bin/
 
       - name: Pull Deepseek R1 model
         run: ollama pull deepseek-r1
