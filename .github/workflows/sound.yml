@@ -51,7 +51,8 @@ jobs:
           echo "===== Gemini API Raw Response ====="
           cat /tmp/gemini_response.json
           echo "===== Extracted Gemini Response ====="
-          echo "$RESPONSE" | jq -r '.candidates[0].content.parts[0].text' | tee generator.py
+          # Remove markdown code block markers before saving to generator.py
+          echo "$RESPONSE" | jq -r '.candidates[0].content.parts[0].text' | sed '/^```/d' | tee generator.py
 
       - name: Show updated Python script
         run: |
