@@ -97,6 +97,21 @@ try:
     generate_tts("Emergency! Please evacuate the building.", "sounds/tts/emergency.wav")
     generate_tts("System check complete. All systems operational.", "sounds/tts/system_check.wav")
     generate_tts("Attention! This is a test of the alarm system.", "sounds/tts/test_alarm.wav")
+
+    # New Alarms
+    generate_alarm(600, 2000, "sounds/alarms/alarm5.wav") # lower frequency, longer duration
+    generate_alarm(2500, 300, "sounds/alarms/alarm6.wav") # higher frequency, shorter duration
+    generate_alarm(440, 1200, "sounds/alarms/alarm7.wav") # A4 note, medium duration
+
+    # New Sirens
+    generate_siren([300, 600, 900, 1200], 4000, "sounds/sirens/siren4.wav") # Ascending siren
+    generate_siren([1500, 1300, 1100, 900, 700, 500], 5000, "sounds/sirens/siren5.wav") # Descending siren
+
+    # New TTS messages
+    generate_tts("Intruder alert! Zone compromised.", "sounds/tts/intruder.wav")
+    generate_tts("All clear. Situation resolved.", "sounds/tts/all_clear.wav")
+    generate_tts("Caution! High voltage area.", "sounds/tts/high_voltage.wav")
+
 except Exception as e:
     log(f"Error during sound generation: {e}")
     traceback.print_exc()
