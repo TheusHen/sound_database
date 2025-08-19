@@ -9,6 +9,9 @@ jobs:
   update_sounds:
     runs-on: ubuntu-latest
     steps:
+      - name: Enable debug (set -x)
+        run: set -x
+
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -22,25 +25,47 @@ jobs:
 
       - name: Generate Gemini prompt file
         run: |
+          echo "===== gemini_prompt.txt ====="
+          cat gemini_prompt.txt | tee /tmp/gemini_prompt.txt
           cp gemini_prompt.txt prompt_final.txt
           echo "" >> prompt_final.txt
           cat generator.py >> prompt_final.txt
+          echo "===== prompt_final.txt ====="
+          cat prompt_final.txt | tee /tmp/prompt_final.txt
 
-      - name: Call Gemini 2.0 Flash to update code
+      - name: Call Gemini 2.0 Flash to update code (debug)
         env:
           GEMINI_API_TOKEN: ${{ secrets.GEMINI_API_TOKEN }}
         run: |
-          RESPONSE=$(curl -s -X POST "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=$GEMINI_API_TOKEN" \
+          echo "===== Gemini API Request Payload ====="
+          PAYLOAD=$(jq -n \
+            --arg prompt "$(cat prompt_final.txt)" \
+            '{ contents: [ { role: "user", parts: [ { text: $prompt } ] } ] }')
+          echo "$PAYLOAD" | tee /tmp/gemini_payload.json
+          echo "===== Curl Request ====="
+          set -x
+          RESPONSE=$(curl -v -X POST "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=$GEMINI_API_TOKEN" \
             -H "Content-Type: application/json" \
-            -d '{
-              "contents": [
-                {"role": "user", "parts": [{"text": "'"$(cat prompt_final.txt)"'"}]}
-              ]
-            }')
-          echo "$RESPONSE" | jq -r '.candidates[0].content.parts[0].text' > generator.py
+            -d "$PAYLOAD" | tee /tmp/gemini_response.json)
+          set +x
+          echo "===== Gemini API Raw Response ====="
+          cat /tmp/gemini_response.json
+          echo "===== Extracted Gemini Response ====="
+          echo "$RESPONSE" | jq -r '.candidates[0].content.parts[0].text' | tee generator.py
+
+      - name: Show updated Python script
+        run: |
+          echo "===== Updated generator.py ====="
+          cat generator.py
 
       - name: Run updated Python script to generate sounds
-        run: python generator.py
+        run: |
+          python -u generator.py
+
+      - name: Show generated sounds directory
+        run: |
+          echo "===== sounds directory tree ====="
+          ls -lR sounds/
 
       - name: Commit and push changes
         run: |
