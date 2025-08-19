@@ -1,5 +1,5 @@
 # Auto Sound Database Generator
-[![AI Model DeepSeek R1](https://img.shields.io/badge/Model-DeepSeek%20R1-536af5?color=536af5&logoColor=white)](https://chat.deepseek.com/)
+[![AI Model DeepSeek R1](https://img.shields.io/badge/Model-Gemini%202.0%20Flash-536af5?color=536af5&logoColor=white)](https://gemini.google.com/)
 
 This project generates a database of alarm sounds, sirens, and English TTS (Text-to-Speech) messages using Python. The audio files are organized into specific folders and can be used in alert systems, testing, automation, or various applications.
 

@@ -20,44 +20,24 @@ jobs:
       - name: Install ffmpeg
         run: sudo apt-get update && sudo apt-get install -y ffmpeg
 
-      - name: Download and install Ollama
+      - name: Generate Gemini prompt file
         run: |
-          # Download Ollama tarball
-          curl -L https://github.com/ollama/ollama/releases/download/v0.11.4/ollama-linux-amd64.tgz -o ollama.tgz
-          # Verify SHA256 checksum
-          echo "a388afb2ccf4e61a3d0de88f0d0600e9e1d67e56bbc9a011ee287f62780bee33  ollama.tgz" | sha256sum -c -
-          # Extract tarball
-          tar -xzf ollama.tgz
-          # Make the binary executable
-          chmod +x ollama-linux-amd64/bin/ollama
-          # Move to system PATH
-          sudo mv ollama-linux-amd64/bin/ollama /usr/local/bin/
+          cp gemini_prompt.txt prompt_final.txt
+          echo "" >> prompt_final.txt
+          cat generator.py >> prompt_final.txt
 
-      - name: Pull Deepseek R1 model
-        run: ollama pull deepseek-r1
-
-      - name: Start Ollama server
+      - name: Call Gemini 2.0 Flash to update code
+        env:
+          GEMINI_API_TOKEN: ${{ secrets.GEMINI_API_TOKEN }}
         run: |
-          nohup ollama serve > ollama.log 2>&1 &
-          sleep 20
-          curl -s http://localhost:11434/api/version || (echo "Ollama did not start!" && cat ollama.log && exit 1)
-
-      - name: Generate Deepseek R1 prompt
-        run: |
-          sed "s|<insert generator.py contents here>|$(cat generator.py)|" deepseek_prompt.txt > prompt_final.txt
-
-      - name: Call Deepseek R1 to update code
-        run: |
-          RESPONSE=$(curl -s -X POST http://localhost:11434/api/chat \
+          RESPONSE=$(curl -s -X POST "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=$GEMINI_API_TOKEN" \
             -H "Content-Type: application/json" \
             -d '{
-              "model": "deepseek-r1",
-              "messages": [
-                {"role": "system", "content": "You are an expert Python developer."},
-                {"role": "user", "content": '"$(jq -Rs . < prompt_final.txt)"'}
+              "contents": [
+                {"role": "user", "parts": [{"text": "'"$(cat prompt_final.txt)"'"}]}
               ]
             }')
-          echo "$RESPONSE" | jq -r '.message.content' > generator.py
+          echo "$RESPONSE" | jq -r '.candidates[0].content.parts[0].text' > generator.py
 
       - name: Run updated Python script to generate sounds
         run: python generator.py
@@ -67,9 +47,5 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add generator.py sounds/
-          git commit -m "Auto-update sounds and code via Deepseek R1" || echo "No changes to commit"
+          git commit -m "Auto-update sounds and code via Gemini 2.0 Flash" || echo "No changes to commit"
           git push
-
-      - name: Print Ollama logs (always)
-        if: always()
-        run: cat ollama.log || echo "No Ollama logs found"
