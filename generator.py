@@ -1,9 +1,10 @@
 import os
 import time
 import numpy as np
-import pyttsx3
-import soundfile as sf
 import traceback
+from gtts import gTTS
+from pydub import AudioSegment
+import soundfile as sf
 
 DEBUG = True
 
@@ -28,9 +29,13 @@ def generate_tts(text, filename):
     try:
         log(f"Generating TTS: '{text}' in {filename}")
         start = time.time()
-        engine = pyttsx3.init()
-        engine.save_to_file(text, filename)
-        engine.runAndWait()
+        temp_mp3 = filename.replace(".wav", ".mp3")
+        tts = gTTS(text=text, lang='en')
+        tts.save(temp_mp3)
+        # Convert MP3 to WAV
+        sound = AudioSegment.from_mp3(temp_mp3)
+        sound.export(filename, format="wav")
+        os.remove(temp_mp3)
         elapsed = time.time() - start
         log(f"TTS generated in {elapsed:.2f} seconds.")
         debug_log(f"TTS file written: {filename}")
