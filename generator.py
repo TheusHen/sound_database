@@ -5,7 +5,6 @@ import traceback
 from gtts import gTTS
 from pydub import AudioSegment
 import soundfile as sf
-import pyttsx3
 
 DEBUG = True
 
@@ -28,12 +27,19 @@ SAMPLE_RATE = 44100  # Hz
 def generate_tts(text, filename):
     debug_log(f"generate_tts called with text='{text}', filename='{filename}'")
     try:
-        log(f"Generating TTS: '{text}' in {filename}")
+        log(f"Generating TTS (gTTS): '{text}' in {filename}")
         start = time.time()
 
-        engine = pyttsx3.init()
-        engine.save_to_file(text, filename)
-        engine.runAndWait()
+        # gTTS só gera MP3 → salvar temporário e depois converter para WAV
+        tmp_mp3 = filename.replace(".wav", ".mp3")
+        tts = gTTS(text=text, lang="en")
+        tts.save(tmp_mp3)
+
+        sound = AudioSegment.from_mp3(tmp_mp3)
+        sound.export(filename, format="wav")
+
+        os.remove(tmp_mp3)
+
         elapsed = time.time() - start
         log(f"TTS generated in {elapsed:.2f} seconds.")
         debug_log(f"TTS file written: {filename}")
@@ -98,9 +104,9 @@ try:
     generate_tts("Attention! This is a test of the alarm system.", "sounds/tts/test_alarm.wav")
 
     # New Alarms
-    generate_alarm(600, 2000, "sounds/alarms/alarm5.wav") # lower frequency, longer duration
-    generate_alarm(2500, 300, "sounds/alarms/alarm6.wav") # higher frequency, shorter duration
-    generate_alarm(440, 1200, "sounds/alarms/alarm7.wav") # A4 note, medium duration
+    generate_alarm(600, 2000, "sounds/alarms/alarm5.wav")
+    generate_alarm(2500, 300, "sounds/alarms/alarm6.wav")
+    generate_alarm(440, 1200, "sounds/alarms/alarm7.wav")
     generate_alarm(300, 800, "sounds/alarms/alarm8.wav")
     generate_alarm(1800, 600, "sounds/alarms/alarm9.wav")
     generate_alarm(1200, 1800, "sounds/alarms/alarm10.wav")
@@ -108,8 +114,8 @@ try:
     generate_alarm(1600, 1000, "sounds/alarms/alarm12.wav")
 
     # New Sirens
-    generate_siren([300, 600, 900, 1200], 4000, "sounds/sirens/siren4.wav") # Ascending siren
-    generate_siren([1500, 1300, 1100, 900, 700, 500], 5000, "sounds/sirens/siren5.wav") # Descending siren
+    generate_siren([300, 600, 900, 1200], 4000, "sounds/sirens/siren4.wav")
+    generate_siren([1500, 1300, 1100, 900, 700, 500], 5000, "sounds/sirens/siren5.wav")
     generate_siren([600, 800, 1000, 1200, 1000, 800, 600], 6000, "sounds/sirens/siren6.wav")
     generate_siren([400, 600], 3000, "sounds/sirens/siren7.wav")
     generate_siren([1800, 1500, 1200], 4500, "sounds/sirens/siren8.wav")
