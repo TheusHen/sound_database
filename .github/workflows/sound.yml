@@ -50,15 +50,15 @@ jobs:
           echo "$PAYLOAD" | tee /tmp/gemini_payload.json
           echo "===== Curl Request ====="
           set -x
-          RESPONSE=$(curl -v -X POST "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=$GEMINI_API_TOKEN" \
+          RESPONSE=$(curl -s -X POST "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=$GEMINI_API_TOKEN" \
             -H "Content-Type: application/json" \
             -d "$PAYLOAD" | tee /tmp/gemini_response.json)
           set +x
           echo "===== Gemini API Raw Response ====="
           cat /tmp/gemini_response.json
           echo "===== Extracted Gemini Response ====="
-          # Remove markdown code block markers before saving to generator.py
-          echo "$RESPONSE" | jq -r '.candidates[0].content.parts[0].text' | sed '/^```/d' | tee generator.py
+          # Extract code only, no markdown/explanation
+          echo "$RESPONSE" | jq -r '.candidates[0].content.parts[0].text' | grep -v '^```' > generator.py
 
       - name: Show updated Python script
         run: |
