@@ -6,5 +6,7 @@ Generate at least 8 new alarm sounds, 5 new siren sounds, and 10 new English TTS
 
 Do not remove any existing sounds or code. Only add new sounds and functions. The code should be executable directly, generating all new sounds as .wav files in their respective folders.
 
+Return ONLY the complete Python code. Do not include any text explanations, markdown code blocks, comments about your changes, or any other output. Only output the Python code. Do not wrap the code in triple backticks (```).
+
 Here is the current code:
 <insert generator.py contents here>
