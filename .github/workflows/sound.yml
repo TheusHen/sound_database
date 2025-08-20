@@ -27,8 +27,8 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y ffmpeg
 
       - name: Install espeak
-        run: sudo apt-get update && sudo apt-get install -y espeak
-
+        run: sudo apt-get update && sudo apt-get install -y espeak ffmpeg libespeak1
+        
       - name: Generate Gemini prompt file
         run: |
           echo "===== gemini_prompt.txt ====="
