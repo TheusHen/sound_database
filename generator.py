@@ -132,6 +132,7 @@ try:
     generate_tts("Temperature levels exceeding safe limits.", "sounds/tts/temperature_warning.wav")
     generate_tts("Network connection lost. Attempting to reconnect.", "sounds/tts/network_lost.wav")
     generate_tts("Incoming message.", "sounds/tts/incoming_message.wav")
+    generate_tts("Warning: obstacle detected.", "sounds/tts/obstacle_detected.wav")
 
 except Exception as e:
     log(f"Error during sound generation: {e}")
