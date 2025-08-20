@@ -1,6 +1,6 @@
 Add new and diverse alarm sounds, sirens, and English TTS speech to the Python file below. Organize each sound into folders: "sounds/alarms", "sounds/sirens", "sounds/tts". Each sound should have a unique name and make use of different frequencies, durations, and TTS messages. Use pyttsx3 for TTS and pydub for sound generation.
 
-Generate at least 3 new alarm sounds, 2 new siren sounds, and 3 new English TTS messages, each with different content and style. Make sure all new sounds are saved in the correct folders, and the code is simple and readable.
+Generate at least 8 new alarm sounds, 5 new siren sounds, and 10 new English TTS messages, each with different content and style. Make sure all new sounds are saved in the correct folders, and the code is simple and readable.
 
 Do not remove any existing sounds or code. Only add new sounds and functions. The code should be executable directly, generating all new sounds as .wav files in their respective folders.
 
