@@ -133,6 +133,9 @@ try:
     generate_tts("Network connection lost. Attempting to reconnect.", "sounds/tts/network_lost.wav")
     generate_tts("Incoming message.", "sounds/tts/incoming_message.wav")
     generate_tts("Warning: obstacle detected.", "sounds/tts/obstacle_detected.wav")
+    generate_tts("Elevated threat level detected. Proceed with caution.", "sounds/tts/threat_level.wav")
+    generate_tts("System overheating. Please check ventilation.", "sounds/tts/overheating.wav")
+    generate_tts("Account locked due to multiple failed attempts.", "sounds/tts/account_locked.wav")
 
 except Exception as e:
     log(f"Error during sound generation: {e}")
