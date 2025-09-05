@@ -136,6 +136,8 @@ try:
     generate_tts("Elevated threat level detected. Proceed with caution.", "sounds/tts/threat_level.wav")
     generate_tts("System overheating. Please check ventilation.", "sounds/tts/overheating.wav")
     generate_tts("Account locked due to multiple failed attempts.", "sounds/tts/account_locked.wav")
+    generate_tts("Attention, a package has arrived at the front desk.", "sounds/tts/package_arrival.wav")
+    generate_tts("Malfunction detected in sector seven.", "sounds/tts/malfunction_sector_seven.wav")
 
 except Exception as e:
     log(f"Error during sound generation: {e}")
