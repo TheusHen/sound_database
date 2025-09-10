@@ -138,6 +138,8 @@ try:
     generate_tts("Account locked due to multiple failed attempts.", "sounds/tts/account_locked.wav")
     generate_tts("Attention, a package has arrived at the front desk.", "sounds/tts/package_arrival.wav")
     generate_tts("Malfunction detected in sector seven.", "sounds/tts/malfunction_sector_seven.wav")
+    generate_tts("Unidentified object detected. Please investigate.", "sounds/tts/unidentified_object.wav")
+    generate_tts("Breach in containment field. Seal the sector.", "sounds/tts/containment_breach.wav")
 
 except Exception as e:
     log(f"Error during sound generation: {e}")
