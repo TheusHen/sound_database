@@ -149,4 +149,3 @@ elapsed_total = time.time() - start_total
 log("All sounds generated successfully!")
 log(f"Total execution time: {elapsed_total:.2f} seconds.")
 debug_log(f"Script finished at {time.strftime('%Y-%m-%d %H:%M:%S')}")
-
