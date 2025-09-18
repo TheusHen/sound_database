@@ -140,6 +140,9 @@ try:
     generate_tts("Malfunction detected in sector seven.", "sounds/tts/malfunction_sector_seven.wav")
     generate_tts("Unidentified object detected. Please investigate.", "sounds/tts/unidentified_object.wav")
     generate_tts("Breach in containment field. Seal the sector.", "sounds/tts/containment_breach.wav")
+    generate_tts("System rebooting in 5 minutes.", "sounds/tts/reboot_5_minutes.wav")
+    generate_tts("Maintenance is scheduled for tomorrow. Expect disruptions.", "sounds/tts/scheduled_maintenance.wav")
+    generate_tts("Invalid passcode. Please try again.", "sounds/tts/invalid_passcode.wav")
 
 except Exception as e:
     log(f"Error during sound generation: {e}")
