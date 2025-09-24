@@ -143,6 +143,10 @@ try:
     generate_tts("System rebooting in 5 minutes.", "sounds/tts/reboot_5_minutes.wav")
     generate_tts("Maintenance is scheduled for tomorrow. Expect disruptions.", "sounds/tts/scheduled_maintenance.wav")
     generate_tts("Invalid passcode. Please try again.", "sounds/tts/invalid_passcode.wav")
+    generate_tts("Warning! Low battery level.", "sounds/tts/low_battery.wav")
+    generate_tts("Door unlocked.", "sounds/tts/door_unlocked.wav")
+    generate_tts("Security system activated.", "sounds/tts/security_activated.wav")
+    generate_tts("Please keep area clean.", "sounds/tts/keep_area_clean.wav")
 
 except Exception as e:
     log(f"Error during sound generation: {e}")
