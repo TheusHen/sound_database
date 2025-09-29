@@ -147,6 +147,9 @@ try:
     generate_tts("Door unlocked.", "sounds/tts/door_unlocked.wav")
     generate_tts("Security system activated.", "sounds/tts/security_activated.wav")
     generate_tts("Please keep area clean.", "sounds/tts/keep_area_clean.wav")
+    generate_tts("Attention, you have unread messages.", "sounds/tts/unread_messages.wav")
+    generate_tts("Motion detected.", "sounds/tts/motion_detected.wav")
+    generate_tts("High CPU Usage.", "sounds/tts/high_cpu.wav")
 
 except Exception as e:
     log(f"Error during sound generation: {e}")
