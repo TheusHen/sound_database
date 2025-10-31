@@ -150,6 +150,20 @@ try:
     generate_tts("Attention, you have unread messages.", "sounds/tts/unread_messages.wav")
     generate_tts("Motion detected.", "sounds/tts/motion_detected.wav")
     generate_tts("High CPU Usage.", "sounds/tts/high_cpu.wav")
+    generate_tts("Unauthorized access detected.", "sounds/tts/unauthorized_access.wav")
+    generate_tts("Welcome, please enter your credentials.", "sounds/tts/enter_credentials.wav")
+
+    # New Alarms 2
+    generate_alarm(700, 900, "sounds/alarms/alarm13.wav")
+    generate_alarm(2300, 400, "sounds/alarms/alarm14.wav")
+    generate_alarm(500, 1300, "sounds/alarms/alarm15.wav")
+
+    # New Sirens 3
+    generate_siren([500, 700, 900], 3500, "sounds/sirens/siren9.wav")
+
+    # New TTS messages 2
+    generate_tts("Door Closed.", "sounds/tts/door_closed.wav")
+    generate_tts("Elevator malfunctioned.", "sounds/tts/elevator_malfunction.wav")
 
 except Exception as e:
     log(f"Error during sound generation: {e}")
