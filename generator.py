@@ -160,10 +160,15 @@ try:
 
     # New Sirens 3
     generate_siren([500, 700, 900], 3500, "sounds/sirens/siren9.wav")
+    generate_siren([800, 1000, 1200, 1400, 1600], 4000, "sounds/sirens/siren10.wav")
 
     # New TTS messages 2
     generate_tts("Door Closed.", "sounds/tts/door_closed.wav")
     generate_tts("Elevator malfunctioned.", "sounds/tts/elevator_malfunction.wav")
+    generate_tts("Intrusion alarm.", "sounds/tts/intrusion_alarm.wav")
+    generate_tts("Oxygen levels critical.", "sounds/tts/oxygen_levels_critical.wav")
+    generate_tts("Please hold.", "sounds/tts/please_hold.wav")
+    generate_tts("Initializing self destruct sequence.", "sounds/tts/self_destruct.wav")
 
 except Exception as e:
     log(f"Error during sound generation: {e}")
