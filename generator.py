@@ -157,10 +157,15 @@ try:
     generate_alarm(700, 900, "sounds/alarms/alarm13.wav")
     generate_alarm(2300, 400, "sounds/alarms/alarm14.wav")
     generate_alarm(500, 1300, "sounds/alarms/alarm15.wav")
+    generate_alarm(1100, 1400, "sounds/alarms/alarm16.wav")
+    generate_alarm(1700, 500, "sounds/alarms/alarm17.wav")
 
     # New Sirens 3
     generate_siren([500, 700, 900], 3500, "sounds/sirens/siren9.wav")
     generate_siren([800, 1000, 1200, 1400, 1600], 4000, "sounds/sirens/siren10.wav")
+    generate_siren([1400, 1200, 1000], 5500, "sounds/sirens/siren11.wav")
+    generate_siren([700, 1400, 700], 2000, "sounds/sirens/siren12.wav")
+    generate_siren([900, 600, 300], 2500, "sounds/sirens/siren13.wav")
 
     # New TTS messages 2
     generate_tts("Door Closed.", "sounds/tts/door_closed.wav")
@@ -169,6 +174,10 @@ try:
     generate_tts("Oxygen levels critical.", "sounds/tts/oxygen_levels_critical.wav")
     generate_tts("Please hold.", "sounds/tts/please_hold.wav")
     generate_tts("Initializing self destruct sequence.", "sounds/tts/self_destruct.wav")
+    generate_tts("Restricted Area, Unauthorized Personnel Will Be Prosecuted.", "sounds/tts/restricted_area.wav")
+    generate_tts("Warning, Radioactive Material Present.", "sounds/tts/radioactive_material.wav")
+    generate_tts("Do not enter the building", "sounds/tts/no_entry.wav")
+    generate_tts("This is an automated voice", "sounds/tts/automated_voice.wav")
 
 except Exception as e:
     log(f"Error during sound generation: {e}")
